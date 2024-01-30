@@ -36,6 +36,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtil.validateToken(tokenValue)) {
+                HttpServletResponse httpResponse = (HttpServletResponse) res;
+                httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                httpResponse.getWriter().write("Token Error.");
                 log.error("Token Error");
                 return;
             }

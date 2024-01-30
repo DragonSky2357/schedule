@@ -1,7 +1,6 @@
 package com.dragonsky.schedule.service;
 
-import com.dragonsky.schedule.dto.CreateMemberDto;
-import com.dragonsky.schedule.dto.LoginMemberDto;
+import com.dragonsky.schedule.dto.member.CreateMemberDto;
 import com.dragonsky.schedule.entity.Member;
 import com.dragonsky.schedule.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

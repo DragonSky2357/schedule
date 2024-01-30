@@ -1,6 +1,6 @@
 package com.dragonsky.schedule.security;
 
-import com.dragonsky.schedule.dto.LoginMemberDto;
+import com.dragonsky.schedule.dto.member.LoginMemberDto;
 import com.dragonsky.schedule.jwt.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

@@ -1,12 +1,11 @@
-package com.dragonsky.schedule.dto;
+package com.dragonsky.schedule.dto.member;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
+
 
 @Getter
-@Setter
-public class LoginMemberDto {
+public class CreateMemberDto {
     @NotBlank
     private String username;
     @NotBlank

@@ -1,11 +1,13 @@
 package com.dragonsky.schedule.entity;
 
-import com.dragonsky.schedule.dto.CreateMemberDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,6 +25,8 @@ public class Member extends Timestamped{
     //@Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z]).{8,15}", message = "password는 8~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
     private String password;
 
+    @OneToMany(mappedBy = "member")
+    private List<Schedule> scheduleList = new ArrayList<>();
     public Member(String username, String password){
         this.username = username;
         this.password = password;
