@@ -3,6 +3,8 @@ package com.dragonsky.schedule.common.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Map;
+
 @Getter
 @AllArgsConstructor
 public class ResponseDto<T>{
@@ -41,7 +43,12 @@ public class ResponseDto<T>{
      * @param message 실패 메시지
      * @return ResponseDto
      */
-    public static <T> ResponseDto<T> fail(int status, String message){
+    public static ResponseDto fail(int status, String message){
         return new ResponseDto<>(status,message,null);
     }
+
+    public static <T> ResponseDto<T> fail(int status, T data){
+        return new ResponseDto<>(status,null,data);
+    }
+
 }
