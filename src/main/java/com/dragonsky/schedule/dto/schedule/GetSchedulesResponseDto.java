@@ -8,16 +8,17 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
-public class GetScheduleResponseDto {
+public class GetSchedulesResponseDto {
     private String title;
     private String content;
+    private boolean done;
     private LocalDateTime createAt;
     private String member;
-    public GetScheduleResponseDto(Schedule schedule, Member member) {
+    public GetSchedulesResponseDto(Schedule schedule) {
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
+        this.done = schedule.isDone();
         this.createAt = schedule.getCreateAt();
-        this.member = member.getUsername();
+        this.member = schedule.getMember().getUsername();
     }
 }
