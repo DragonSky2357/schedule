@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,6 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             LoginMemberDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginMemberDto.class);
 
+            // 사용자의 자격 증명을 검증하고, 사용자를 인증하는 과정
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             requestDto.getUsername(),
@@ -43,16 +45,31 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
-        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
+        try {
+            String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+            String token = jwtUtil.createToken(username);
 
-        String token = jwtUtil.createToken(username);
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"statusCode\": 201, \"message\": \"성공적으로 인증되었습니다.\"}");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
+        try {
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"statusCode\": 400, \"message\": \"회원을 찾을 수 없습니다.\"}");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

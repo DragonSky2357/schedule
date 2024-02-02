@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -36,10 +37,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtil.validateToken(tokenValue)) {
-                HttpServletResponse httpResponse = (HttpServletResponse) res;
-                httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                httpResponse.getWriter().write("Token Error.");
-                log.error("Token Error");
+
+                res.setStatus(HttpStatus.BAD_REQUEST.value());
+                res.setContentType("application/json");
+                res.setCharacterEncoding("UTF-8");
+                res.getWriter().write("{\"statusCode\": 400, \"message\": \"토큰이 유효하지 않습니다.\"}");
                 return;
             }
 
