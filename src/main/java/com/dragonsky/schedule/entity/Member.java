@@ -18,17 +18,22 @@ public class Member extends Timestamped{
     private Long id;
 
     @Column(nullable = false,unique = true)
-    //@Pattern(regexp = "(?=.*[0-9])(?=.*[a-z]).{4,10}", message = "username는 8~10자 소문자, 숫자를 사용하세요.")
     private String username;
 
     @Column(nullable = false)
-    //@Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z]).{8,15}", message = "password는 8~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
     private String password;
 
-    @OneToMany(mappedBy = "member")
-    private List<Schedule> scheduleList = new ArrayList<>();
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<Schedule> schedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
     public Member(String username, String password){
         this.username = username;
         this.password = password;
+    }
+
+    public void removeComment(Comment comment){
+        this.comments.remove(comment);
     }
 }
