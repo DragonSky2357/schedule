@@ -2,6 +2,7 @@ package com.dragonsky.schedule.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
@@ -50,5 +51,6 @@ public class ResponseDto<T>{
     public static <T> ResponseDto<T> fail(int status, T data){
         return new ResponseDto<>(status,null,data);
     }
+
 
 }

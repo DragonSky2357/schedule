@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class LoginMemberDto {
-    @NotBlank
+    @NotBlank(message = "username은 필수 값입니다.")
     private String username;
-    @NotBlank
+    @NotBlank(message = "password는 필수 값입니다.")
     private String password;
 }
