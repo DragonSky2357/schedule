@@ -36,4 +36,5 @@ public class Comment extends Timestamped{
         this.schedule.getComments().remove(this);
         this.member.getComments().remove(this);
     }
+
 }

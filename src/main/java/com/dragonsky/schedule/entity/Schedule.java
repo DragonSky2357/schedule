@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Schedule extends Timestamped{
     @Id
@@ -38,7 +37,6 @@ public class Schedule extends Timestamped{
         this.title = createScheduleDto.getTitle();
         this.content = createScheduleDto.getContent();
         this.member = member;
-        //member.getSchedules().add(this);
     }
 
     public void updateSchedule(UpdateScheduleDto updateScheduleDto){
@@ -52,5 +50,9 @@ public class Schedule extends Timestamped{
 
     public void removeComment(Comment comment){
         this.comments.remove(comment);
+    }
+
+    public void setDone() {
+        this.done = !this.done;
     }
 }
