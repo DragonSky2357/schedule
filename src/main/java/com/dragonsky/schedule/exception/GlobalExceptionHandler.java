@@ -20,6 +20,12 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors()
                 .forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(ResponseDto.fail(HttpStatus.BAD_REQUEST.value(), errors));
+        return ResponseEntity.badRequest().body(ResponseDto.fail(HttpStatus.BAD_REQUEST.value(),errors));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity handleIllegalArgumentExceptions(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ResponseDto.fail(HttpStatus.BAD_REQUEST.value(),ex.getMessage()));
     }
 }
