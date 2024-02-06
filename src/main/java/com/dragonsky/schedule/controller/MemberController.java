@@ -16,15 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class MemberController {
     private final MemberService memberService;
-
+    
     @PostMapping("/signup")
-    public ResponseEntity signUp(@RequestBody @Valid CreateMemberDto createMemberDto){
-        try{
-            memberService.createMember(createMemberDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.success(HttpStatus.CREATED.value(),"회원 가입 성공"));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN.value())
-                    .body(ResponseDto.fail(HttpStatus.FORBIDDEN.value(),e.getMessage()));
-        }
+    public ResponseEntity<ResponseDto> signUp(@RequestBody @Valid CreateMemberDto createMemberDto){
+        memberService.createMember(createMemberDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.success(HttpStatus.CREATED.value(),"회원 가입 성공"));
     }
 }
