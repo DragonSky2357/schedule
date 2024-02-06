@@ -17,12 +17,13 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
 
+    @Transactional
     public CreateScheduleResponseDto createSchedule(CreateScheduleDto createScheduleDto, Member member){
 
         Schedule schedule = new Schedule(createScheduleDto,member);
@@ -31,7 +32,6 @@ public class ScheduleService {
         return new CreateScheduleResponseDto(scheduleSave,member);
     }
 
-    @Transactional(readOnly = true)
     public List<GetSchedulesResponseDto> getSchedules(Member member){
         return scheduleRepository.findByMember(member)
                 .stream()
@@ -40,7 +40,7 @@ public class ScheduleService {
     }
 
 
-    @Transactional(readOnly = true)
+
     public GetScheduleResponseDto getSchedule(Long scheduleId, Member member) {
         Schedule schedule =  scheduleRepository.findByMemberAndId(member,scheduleId)
                 .orElseThrow(()-> new IllegalArgumentException("존재 하지 않은 포스터입니다."));
@@ -48,6 +48,7 @@ public class ScheduleService {
         return new GetScheduleResponseDto(schedule,member);
     }
 
+    @Transactional
     public UpdateScheduleResponseDto updateSchedule(Long scheduleId, UpdateScheduleDto updateScheduleRequestDto, Member member) {
         Schedule schedule =  scheduleRepository.findByMemberAndId(member,scheduleId)
                 .orElseThrow(()-> new IllegalArgumentException("존재 하지 않은 포스터입니다."));
@@ -61,6 +62,7 @@ public class ScheduleService {
         return new UpdateScheduleResponseDto(schedule,member);
     }
 
+    @Transactional
     public void updateDoneSchedule(Long scheduleId, Member member) {
         Schedule schedule =  scheduleRepository.findByMemberAndId(member,scheduleId)
                 .orElseThrow(()-> new IllegalArgumentException("존재 하지 않은 포스터입니다."));
@@ -69,11 +71,11 @@ public class ScheduleService {
             new IllegalArgumentException("게시글의 작성자만 접근할 수 있습니다.");
         }
 
-        schedule.setDone(!schedule.isDone());
+        schedule.setDone();
 
     }
 
-
+    @Transactional
     public CreateScheduleCommentResponseDto createScheduleComment(Long scheduleId, CreateCommentDto createCommentDto, Member member) {
         Schedule schedule =  scheduleRepository.findByMemberAndId(member,scheduleId)
                 .orElseThrow(()-> new IllegalArgumentException("존재 하지 않은 포스터입니다."));
@@ -88,6 +90,7 @@ public class ScheduleService {
         return new CreateScheduleCommentResponseDto(member,schedule,comment);
     }
 
+    @Transactional
     public UpdateScheduleCommentResponseDto updateScheduleComment(Long scheduleId, Long commentId,UpdateScheduleCommentDto updateScheduleCommentDto, Member member) {
         Schedule schedule =  scheduleRepository.findByMemberAndId(member,scheduleId)
                 .orElseThrow(()-> new IllegalArgumentException("존재 하지 않은 포스터입니다."));
@@ -102,6 +105,7 @@ public class ScheduleService {
         return new UpdateScheduleCommentResponseDto(member,schedule,comment);
     }
 
+    @Transactional
     public void deleteScheduleComment(Long scheduleId, Long commentId, Member member) {
         Schedule schedule =  scheduleRepository.findByMemberAndId(member,scheduleId)
                 .orElseThrow(()-> new IllegalArgumentException("존재 하지 않은 포스터입니다."));
@@ -116,7 +120,6 @@ public class ScheduleService {
         commentRepository.delete(comment);
     }
 
-    @Transactional(readOnly = true)
     public List<GetSchedulesResponseDto> getNotDoneSchedules(Member member) {
         return scheduleRepository.findByMemberAndDoneIsFalseOrderByCreateAtDesc(member)
                 .stream()
